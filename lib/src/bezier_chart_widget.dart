@@ -1188,6 +1188,48 @@ class _BezierChartPainter extends CustomPainter {
       if (!footerDrawed) footerDrawed = true;
 
       canvas.drawPath(path, paintLine);
+
+       // fill the bellow space of 
+
+    Path belowBarPath = Path.from(path);
+
+    Size chartViewSize = size;//getChartUsableDrawSize(viewSize);
+
+    /// Line To Bottom Right
+    double x = lastPoint.x * chartViewSize.width;
+    double y = chartViewSize.height;;
+    belowBarPath.lineTo(x, y);
+
+    /// Line To Bottom Left
+    x = _getRealValue(
+          xAxisDataPoints[0].value,
+          chartViewSize.width,
+          _maxValueX,
+        ) * chartViewSize.width;
+    y = chartViewSize.height;
+    belowBarPath.lineTo(x, y);
+
+    /// Line To Top Left
+    x = _getRealValue(
+          xAxisDataPoints[0].value,
+          chartViewSize.width,
+          _maxValueX,
+        ) * chartViewSize.width;
+    y = _getRealValue(
+              line.data[0].value - (config.startYAxisFromNonZeroValue ? minYValue : 0.0),
+              height,
+              _maxValueY,
+            ) * chartViewSize.height;
+    belowBarPath.lineTo(x, y);
+    belowBarPath.close();
+
+     var belowBarPaint = Paint()..style = PaintingStyle.fill;
+       belowBarPaint.color = Colors.red;
+       belowBarPaint.shader = null;
+
+     canvas.drawPath(belowBarPath, belowBarPaint); 
+
+
       if (config.showDataPoints) {
         //draw data points
         canvas.drawPoints(
