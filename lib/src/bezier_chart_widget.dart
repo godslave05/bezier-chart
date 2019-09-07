@@ -1,6 +1,6 @@
 import 'dart:io';
 import 'dart:math';
-import 'dart:ui';
+import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -1224,23 +1224,55 @@ class _BezierChartPainter extends CustomPainter {
     belowBarPath.close();
 
      var belowBarPaint = Paint()..style = PaintingStyle.fill;
-       belowBarPaint.color = Colors.red;
-       belowBarPaint.shader = null;
 
+    /// here we update the [belowBarPaint] to draw the solid color
+    /// or the gradient based on the [BelowBarData] class.
+    if (config.belowBarData.colors.length == 1) {
+      belowBarPaint.color = config.belowBarData.colors[0];
+      belowBarPaint.shader = null;
+    } else {
+
+      List<double> stops = [];
+      if (config.belowBarData.gradientColorStops == null
+        || config.belowBarData.gradientColorStops.length != config.belowBarData.colors.length) {
+        /// provided gradientColorStops is invalid and we calculate it here
+        config.belowBarData.colors.asMap().forEach((index, color) {
+          double ss = 1.0 / config.belowBarData.colors.length;
+          stops.add(ss * (index + 1));
+        });
+      } else {
+        stops = config.belowBarData.gradientColorStops;
+      }
+
+      var from = config.belowBarData.gradientFrom;
+      var to = config.belowBarData.gradientTo;
+      belowBarPaint.shader = ui.Gradient.linear(
+        Offset(
+          (chartViewSize.width * from.dx),
+          (chartViewSize.height * from.dy),
+        ),
+        Offset(
+           (chartViewSize.width * to.dx),
+       (chartViewSize.height * to.dy),
+        ),
+        config.belowBarData.colors,
+        stops,
+      );
+    }
      canvas.drawPath(belowBarPath, belowBarPaint); 
 
 
       if (config.showDataPoints) {
         //draw data points
         canvas.drawPoints(
-            PointMode.points,
+            ui.PointMode.points,
             dataPoints,
             paintControlPoints
               ..style = PaintingStyle.stroke
               ..strokeWidth = 10
               ..color = line.lineColor);
         canvas.drawPoints(
-          PointMode.points,
+          ui.PointMode.points,
           dataPoints,
           paintControlPoints
             ..style = PaintingStyle.fill

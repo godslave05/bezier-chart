@@ -86,6 +86,10 @@ class BezierChartConfig {
   ///The physics for horizontal ScrollView
   final ScrollPhysics physics;
 
+  /// to fill space below the bar line,
+  final BelowBarData belowBarData;
+
+
   BezierChartConfig({
     this.verticalIndicatorStrokeWidth = 2.0,
     this.verticalIndicatorColor = Colors.black,
@@ -123,5 +127,68 @@ class BezierChartConfig {
       fontSize: 11,
     ),
     this.physics = const AlwaysScrollableScrollPhysics(),
+    this.belowBarData = const BelowBarData(),
+  });
+}
+/***** BelowBarData *****/
+/// This class holds data about draw on below space of the bar line,
+class BelowBarData {
+  final bool show;
+
+  /// if you pass just one color, the solid color will be used,
+  /// or if you pass more than one color, we use gradient mode to draw.
+  /// then the [gradientFrom], [gradientTo] and [gradientColorStops] is important,
+  final List<Color> colors;
+
+  /// if the gradient mode is enabled (if you have more than one color)
+  /// [gradientFrom] and [gradientTo] is important otherwise they will be skipped.
+  /// you can determine where the gradient should start and end,
+  /// values are available between 0 to 1,
+  /// Offset(0, 0) represent the top / left
+  /// Offset(1, 1) represent the bottom / right
+  final Offset gradientFrom;
+  final Offset gradientTo;
+
+  /// if more than one color provided gradientColorStops will hold
+  /// stop points of the gradient.
+  final List<double> gradientColorStops;
+
+
+  /// holds data for drawing a line from each spot the the bottom of the chart
+  final BelowSpotsLine belowSpotsLine;
+
+  const BelowBarData({
+    this.show = true,
+    this.colors = const [Colors.blueGrey],
+    this.gradientFrom = const Offset(0, 0),
+    this.gradientTo = const Offset(1, 0),
+    this.gradientColorStops,
+    this.belowSpotsLine = const BelowSpotsLine(),
+  });
+}
+
+class BelowSpotsLine {
+  final bool show;
+
+  /// determines style of the line
+  final FlLine flLineStyle;
+
+  /// a function to determine whether to show or hide the below line on the given spot
+
+  const BelowSpotsLine({
+    this.show = false,
+    this.flLineStyle = const FlLine(),
+  });
+}
+
+/// This class can be used wherever we want draw a straight line,
+/// and contains visual properties
+class FlLine {
+  final Color color;
+  final double strokeWidth;
+
+  const FlLine({
+    this.color = Colors.black,
+    this.strokeWidth = 2,
   });
 }
