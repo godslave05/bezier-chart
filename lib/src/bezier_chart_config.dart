@@ -87,7 +87,7 @@ class BezierChartConfig {
   final ScrollPhysics physics;
 
   /// to fill space below the bar line,
-  final BelowBarData belowBarData;
+  final BelowCurveData belowBarData;
 
 
   BezierChartConfig({
@@ -127,12 +127,12 @@ class BezierChartConfig {
       fontSize: 11,
     ),
     this.physics = const AlwaysScrollableScrollPhysics(),
-    this.belowBarData = const BelowBarData(),
+    this.belowBarData = const BelowCurveData(),
   });
 }
 /***** BelowBarData *****/
 /// This class holds data about draw on below space of the bar line,
-class BelowBarData {
+class BelowCurveData {
   final bool show;
 
   /// if you pass just one color, the solid color will be used,
@@ -155,39 +155,39 @@ class BelowBarData {
 
 
   /// holds data for drawing a line from each spot the the bottom of the chart
-  final BelowSpotsLine belowSpotsLine;
+  final BelowPointLine belowSpotsLine;
 
-  const BelowBarData({
+  const BelowCurveData({
     this.show = true,
     this.colors = const [Colors.blueGrey],
     this.gradientFrom = const Offset(0, 0),
     this.gradientTo = const Offset(1, 0),
     this.gradientColorStops,
-    this.belowSpotsLine = const BelowSpotsLine(),
+    this.belowSpotsLine = const BelowPointLine(),
   });
 }
 
-class BelowSpotsLine {
+class BelowPointLine {
   final bool show;
 
   /// determines style of the line
-  final FlLine flLineStyle;
+  final CustomLine flLineStyle;
 
   /// a function to determine whether to show or hide the below line on the given spot
 
-  const BelowSpotsLine({
+  const BelowPointLine({
     this.show = false,
-    this.flLineStyle = const FlLine(),
+    this.flLineStyle = const CustomLine(),
   });
 }
 
 /// This class can be used wherever we want draw a straight line,
 /// and contains visual properties
-class FlLine {
+class CustomLine {
   final Color color;
   final double strokeWidth;
 
-  const FlLine({
+  const CustomLine({
     this.color = Colors.black,
     this.strokeWidth = 2,
   });
