@@ -1189,7 +1189,7 @@ class _BezierChartPainter extends CustomPainter {
 
       canvas.drawPath(path, paintLine);
 
-       // fill the bellow space of 
+       // fill the bellow space of curved line
 
     Path belowBarPath = Path.from(path);
 
