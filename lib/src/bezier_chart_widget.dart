@@ -1030,7 +1030,7 @@ class _BezierChartPainter extends CustomPainter {
 
       Paint paintXLines = Paint()
         ..color = config.xLinesColor
-        ..strokeWidth = 1.0
+        ..strokeWidth = 2.0
         ..style = PaintingStyle.stroke;
 
       _AxisValue lastPoint;
@@ -1092,8 +1092,19 @@ class _BezierChartPainter extends CustomPainter {
             );
 
         if (config.displayLinesXAxis && series.length == 1) {
-          canvas.drawLine(
-              Offset(valueX, height), Offset(valueX, valueY), paintXLines);
+          // canvas.drawLine(
+          //     Offset(valueX, height), Offset(valueX, valueY), paintXLines);
+          var max = valueY - height;
+          var dashWidth = 5;
+          var dashSpace = 5;
+          double startY = height;
+          while (max >= 0) {
+            canvas.drawLine(Offset(valueX, startY),
+                Offset(valueX, startY + dashWidth), paintXLines);
+            final space = (dashSpace + dashWidth);
+            startY += space;
+            max -= space;
+          }
         }
 
         if (lastPoint == null) {
@@ -1189,78 +1200,82 @@ class _BezierChartPainter extends CustomPainter {
 
       canvas.drawPath(path, paintLine);
 
-       // fill the bellow space of curved line
+      // fill the bellow space of curved line
 
-    Path belowBarPath = Path.from(path);
+      Path belowBarPath = Path.from(path);
 
-    Size chartViewSize = size;//getChartUsableDrawSize(viewSize);
+      Size chartViewSize = size; //getChartUsableDrawSize(viewSize);
 
-    /// Line To Bottom Right
-    double x = lastPoint.x * chartViewSize.width;
-    double y = chartViewSize.height;;
-    belowBarPath.lineTo(x, y);
+      /// Line To Bottom Right
+      double x = lastPoint.x * chartViewSize.width;
+      double y = chartViewSize.height;
+      ;
+      belowBarPath.lineTo(x, y);
 
-    /// Line To Bottom Left
-    x = _getRealValue(
-          xAxisDataPoints[0].value,
-          chartViewSize.width,
-          _maxValueX,
-        ) * chartViewSize.width;
-    y = chartViewSize.height;
-    belowBarPath.lineTo(x, y);
+      /// Line To Bottom Left
+      x = _getRealValue(
+            xAxisDataPoints[0].value,
+            chartViewSize.width,
+            _maxValueX,
+          ) *
+          chartViewSize.width;
+      y = chartViewSize.height;
+      belowBarPath.lineTo(x, y);
 
-    /// Line To Top Left
-    x = _getRealValue(
-          xAxisDataPoints[0].value,
-          chartViewSize.width,
-          _maxValueX,
-        ) * chartViewSize.width;
-    y = _getRealValue(
-              line.data[0].value - (config.startYAxisFromNonZeroValue ? minYValue : 0.0),
-              height,
-              _maxValueY,
-            ) * chartViewSize.height;
-    belowBarPath.lineTo(x, y);
-    belowBarPath.close();
+      /// Line To Top Left
+      x = _getRealValue(
+            xAxisDataPoints[0].value,
+            chartViewSize.width,
+            _maxValueX,
+          ) *
+          chartViewSize.width;
+      y = _getRealValue(
+            line.data[0].value -
+                (config.startYAxisFromNonZeroValue ? minYValue : 0.0),
+            height,
+            _maxValueY,
+          ) *
+          chartViewSize.height;
+      belowBarPath.lineTo(x, y);
+      belowBarPath.close();
 
-     var belowBarPaint = Paint()..style = PaintingStyle.fill;
+      var belowBarPaint = Paint()..style = PaintingStyle.fill;
 
-    /// here we update the [belowBarPaint] to draw the solid color
-    /// or the gradient based on the [BelowBarData] class.
-    if (config.belowBarData.colors.length == 1) {
-      belowBarPaint.color = config.belowBarData.colors[0];
-      belowBarPaint.shader = null;
-    } else {
-
-      List<double> stops = [];
-      if (config.belowBarData.gradientColorStops == null
-        || config.belowBarData.gradientColorStops.length != config.belowBarData.colors.length) {
-        /// provided gradientColorStops is invalid and we calculate it here
-        config.belowBarData.colors.asMap().forEach((index, color) {
-          double ss = 1.0 / config.belowBarData.colors.length;
-          stops.add(ss * (index + 1));
-        });
+      /// here we update the [belowBarPaint] to draw the solid color
+      /// or the gradient based on the [BelowBarData] class.
+      if (config.belowBarData.colors.length == 1) {
+        belowBarPaint.color = config.belowBarData.colors[0];
+        belowBarPaint.shader = null;
       } else {
-        stops = config.belowBarData.gradientColorStops;
+        List<double> stops = [];
+        if (config.belowBarData.gradientColorStops == null ||
+            config.belowBarData.gradientColorStops.length !=
+                config.belowBarData.colors.length) {
+          /// provided gradientColorStops is invalid and we calculate it here
+          config.belowBarData.colors.asMap().forEach((index, color) {
+            double ss = 1.0 / config.belowBarData.colors.length;
+            stops.add(ss * (index + 1));
+          });
+        } else {
+          stops = config.belowBarData.gradientColorStops;
+        }
+
+        var from = config.belowBarData.gradientFrom;
+        var to = config.belowBarData.gradientTo;
+        belowBarPaint.shader = ui.Gradient.linear(
+          Offset(
+            (chartViewSize.width * from.dx),
+            (chartViewSize.height * from.dy),
+          ),
+          Offset(
+            (chartViewSize.width * to.dx),
+            (chartViewSize.height * to.dy),
+          ),
+          config.belowBarData.colors,
+          stops,
+        );
       }
-
-      var from = config.belowBarData.gradientFrom;
-      var to = config.belowBarData.gradientTo;
-      belowBarPaint.shader = ui.Gradient.linear(
-        Offset(
-          (chartViewSize.width * from.dx),
-          (chartViewSize.height * from.dy),
-        ),
-        Offset(
-           (chartViewSize.width * to.dx),
-       (chartViewSize.height * to.dy),
-        ),
-        config.belowBarData.colors,
-        stops,
-      );
-    }
-     canvas.drawPath(belowBarPath, belowBarPaint); 
-
+      canvas.drawPath(belowBarPath, belowBarPaint);
 
       if (config.showDataPoints) {
         //draw data points
@@ -1446,7 +1461,13 @@ class _BezierChartPainter extends CustomPainter {
           paintInfo,
         );
         //End triangle
-
+        textPainter.paint(
+          canvas,
+          Offset(
+            center.dx - textPainter.width / 2,
+            center.dy - offsetInfo - infoHeight / 2.5,
+          ),
+        );
         if (animation.isCompleted) {
           //Paint Text , title and description
           textPainter.paint(
