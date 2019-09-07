@@ -1094,7 +1094,7 @@ class _BezierChartPainter extends CustomPainter {
         if (config.displayLinesXAxis && series.length == 1) {
           // canvas.drawLine(
           //     Offset(valueX, height), Offset(valueX, valueY), paintXLines);
-          var max = valueY - height;
+          var max = height-valueY;
           var dashWidth = 5;
           var dashSpace = 5;
           double startY = height;
@@ -1102,10 +1102,38 @@ class _BezierChartPainter extends CustomPainter {
             canvas.drawLine(Offset(valueX, startY),
                 Offset(valueX, startY + dashWidth), paintXLines);
             final space = (dashSpace + dashWidth);
-            startY += space;
+            startY -= space;
             max -= space;
           }
         }
+
+        // -----------------
+
+        // yAxix value on top of the indicator circle
+
+        TextPainter textPainterTest = TextPainter(
+          textAlign: TextAlign.center,
+          text: TextSpan(
+            children: [ 
+              TextSpan(
+              text: axisY.toString(),
+              style: config.bubbleIndicatorValueStyle.copyWith(fontSize: 11),
+              children: [],
+            ),],
+          ),
+          textDirection: TextDirection.ltr,
+        );
+        textPainterTest.layout();
+
+          textPainterTest.paint(
+            canvas,
+            Offset(
+              valueX - textPainterTest.width / 2,
+              valueY - textPainterTest.height*2,
+            ),
+          );
+
+        // ------------------
 
         if (lastPoint == null) {
           lastPoint = _AxisValue(x: valueX, y: valueY);
@@ -1461,13 +1489,7 @@ class _BezierChartPainter extends CustomPainter {
           paintInfo,
         );
         //End triangle
-        textPainter.paint(
-          canvas,
-          Offset(
-            center.dx - textPainter.width / 2,
-            center.dy - offsetInfo - infoHeight / 2.5,
-          ),
-        );
+
         if (animation.isCompleted) {
           //Paint Text , title and description
           textPainter.paint(

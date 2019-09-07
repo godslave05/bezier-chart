@@ -43,6 +43,7 @@ class MyHomePage extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            _temperatureChart(),
             ListTile(
               title: Text("Sample 1"),
               subtitle: Text("Number Chart"),
@@ -142,7 +143,86 @@ class MyHomePage extends StatelessWidget {
       ),
     );
   }
+
+Widget _temperatureChart(){
+return Center(
+    child: Container(
+      height: 512,
+      width: 1024,
+      child: BezierChart(
+        bezierChartScale: BezierChartScale.CUSTOM,
+        
+        xAxisCustomValues: const [0.0, 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0,8.0,9.0,10.0,11.0,12.0,13.0,14.0,15.0,16.0,17.0,18.0,19.0,20.0,21.0,22.0,23.0],
+        series:  [
+          BezierLine(
+            label: 'Test',
+            lineColor: Colors.green,
+            lineStrokeWidth: 0,
+            data: const [
+              DataPoint<double>(value: 23, xAxis: 0.0),
+              DataPoint<double>(value: 27, xAxis: 1.0),
+              DataPoint<double>(value: 22, xAxis: 2.0),
+              DataPoint<double>(value: 24, xAxis: 3.0),
+              DataPoint<double>(value: 35, xAxis: 4.0),
+              DataPoint<double>(value: 33, xAxis: 5.0),
+              DataPoint<double>(value: 34, xAxis: 6.0),
+              DataPoint<double>(value: 23, xAxis: 7.0),
+              DataPoint<double>(value: 23, xAxis: 8.0),
+              DataPoint<double>(value: 27, xAxis: 9.0),
+              DataPoint<double>(value: 22, xAxis: 10.0),
+              DataPoint<double>(value: 24, xAxis: 11.0),
+              DataPoint<double>(value: 35, xAxis: 12.0),
+              DataPoint<double>(value: 33, xAxis: 13.0),
+              DataPoint<double>(value: 34, xAxis: 14.0),
+              DataPoint<double>(value: 23, xAxis: 15.0),
+              DataPoint<double>(value: 23, xAxis: 16.0),
+              DataPoint<double>(value: 27, xAxis: 17.0),
+              DataPoint<double>(value: 22, xAxis: 18.0),
+              DataPoint<double>(value: 24, xAxis: 19.0),
+              DataPoint<double>(value: 35, xAxis: 20.0),
+              DataPoint<double>(value: 33, xAxis: 21.0),
+              DataPoint<double>(value: 34, xAxis: 22.0),
+              DataPoint<double>(value: 23, xAxis: 23.0),
+            ],
+          ),
+        ],
+        config: BezierChartConfig(
+          verticalIndicatorColor: Colors.blue,
+          showVerticalIndicator: true,
+          contentWidth: 2048,
+          showDataPoints: true,
+          displayLinesXAxis: true,
+          bubbleIndicatorValueStyle: TextStyle(color: Colors.green),
+          xAxisTextStyle: TextStyle(color: Colors.red,),
+          xLinesColor: Colors.blue,
+          belowBarData: BelowCurveData(
+                        show: true,
+                        colors: [
+                          Colors.grey.withOpacity(0.1),
+                          Colors.grey.withOpacity(.05),
+                        ],
+                        gradientColorStops: [0.5, 1.0],
+                        gradientFrom: Offset(0, 0),
+                        gradientTo: Offset(0, 1),
+                        belowSpotsLine: BelowPointLine(
+                          show: true,
+                          flLineStyle: const CustomLine(
+                            color: Colors.red,
+                            strokeWidth: 1,
+  
+                          ),
+                        )
+                      ),
+
+
+        ),
+      ),
+    ),
+  );
+  }
 }
+
+
 
 //SAMPLE CUSTOM VALUES
 Widget sample1(BuildContext context) {
