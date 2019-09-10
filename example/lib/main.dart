@@ -157,7 +157,7 @@ return Center(
           BezierLine(
             label: 'Test',
             lineColor: Colors.green,
-            lineStrokeWidth: 0,
+            lineStrokeWidth: 4,
             data: const [
               DataPoint<double>(value: 23, xAxis: 0.0),
               DataPoint<double>(value: 27, xAxis: 1.0),
@@ -196,10 +196,10 @@ return Center(
           xAxisTextStyle: TextStyle(color: Colors.red,),
           xLinesColor: Colors.blue,
           belowBarData: BelowCurveData(
-                        show: true,
+                        show: false,
                         colors: [
-                          Colors.grey.withOpacity(0.1),
-                          Colors.grey.withOpacity(.05),
+                          Colors.grey,
+                          Colors.white.withOpacity(.01),
                         ],
                         gradientColorStops: [0.5, 1.0],
                         gradientFrom: Offset(0, 0),

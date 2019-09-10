@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'dart:math';
+import 'dart:typed_data';
 import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -1225,8 +1226,9 @@ class _BezierChartPainter extends CustomPainter {
 
       //only draw the footer for the first line because it is the same for all the lines
       if (!footerDrawed) footerDrawed = true;
-
+      
       canvas.drawPath(path, paintLine);
+      
 
       // fill the bellow space of curved line
 
@@ -1237,7 +1239,7 @@ class _BezierChartPainter extends CustomPainter {
       /// Line To Bottom Right
       double x = lastPoint.x * chartViewSize.width;
       double y = chartViewSize.height;
-      ;
+      
       belowBarPath.lineTo(x, y);
 
       /// Line To Bottom Left
@@ -1303,6 +1305,7 @@ class _BezierChartPainter extends CustomPainter {
           stops,
         );
       }
+      if(config.belowBarData.show)
       canvas.drawPath(belowBarPath, belowBarPaint);
 
       if (config.showDataPoints) {
