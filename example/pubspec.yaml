@@ -24,7 +24,9 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^0.1.2
   bezier_chart:
-    path: ../
+    git:
+      url: git://github.com/godslave05/bezier-chart.git
+      ref: master
 
 dev_dependencies:
   flutter_test:
