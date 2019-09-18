@@ -837,7 +837,7 @@ Widget sample8(BuildContext context) {
 
   return Center(
     child: Container(
-      color: Colors.red,
+      color: Colors.white,
       height: MediaQuery.of(context).size.height / 2,
       width: MediaQuery.of(context).size.width,
       child: BezierChart(
@@ -848,8 +848,8 @@ Widget sample8(BuildContext context) {
         series: [
           BezierLine(
           lineColor: Colors.blue,
-          lineStrokeWidth: 8,
-            label: "Temperature",
+          lineStrokeWidth: 2,
+            label: "Temp",
             data: [
               DataPoint<DateTime>(value: 0, xAxis: date1),
               DataPoint<DateTime>(value: 50, xAxis: date2),
@@ -860,27 +860,51 @@ Widget sample8(BuildContext context) {
             ],
           ),
         ],
-        config: BezierChartConfig(
+/*         config: BezierChartConfig(
+          verticalIndicatorStrokeWidth: 3.0,
+          verticalIndicatorColor: Colors.black26,
+          showVerticalIndicator: true,
+          verticalIndicatorFixedPosition: false,
+          bubbleIndicatorTitleStyle: TextStyle(
+            color: Colors.blue,
+          ),
+          bubbleIndicatorLabelStyle: TextStyle(
+            color: Colors.red,
+          ),
+          displayYAxis: true,
+          stepsYAxis: 25,
+          backgroundGradient: LinearGradient(
+            colors: [
+              Colors.red[300],
+              Colors.red[400],
+              Colors.red[400],
+              Colors.red[500],
+              Colors.red,
+            ],
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+          ),
+          footerHeight: 35.0,
+        ), */
+                config: BezierChartConfig(
                   footerHeight: 128,
-                  verticalIndicatorColor:Colors.blue,
+                  verticalIndicatorColor: Colors.blue,
                   showVerticalIndicator: true,
                   contentWidth: MediaQuery.of(context).size.width * 2,
                   showDataPoints: false,
                   displayLinesXAxis: true,
                   bubbleIndicatorValueStyle: TextStyle(
-                      color:Colors.amber,
-                      fontSize: 72,
+                      color:Colors.green,
+                      fontSize: 72,),
                   xAxisTextStyle: TextStyle(
-                    color:
-                        ColorConstants.WEATHER_MORE_DAY_INFO_ITEM_COLOR_HEAVY,
+                    color:Colors.green,
                   ),
-                  xLinesColor:
-                      ColorConstants.WEATHER_MORE_DAY_INFO_ICON_COLOR_LIGHT,
+                  xLinesColor:Colors.blueAccent,
                   belowBarData: BelowCurveData(
                       show: false,
                       colors: [
-                        ColorConstants.TEMP_BY_HOUR_START,
-                        ColorConstants.TEMP_BY_HOUR_END,
+                        Colors.grey,
+                        Colors.blueGrey,
                       ],
                       gradientColorStops: [0.0, 1.0],
                       gradientFrom: Offset(0, 0),
@@ -888,12 +912,12 @@ Widget sample8(BuildContext context) {
                       belowSpotsLine: BelowPointLine(
                         show: true,
                         flLineStyle: const CustomLine(
-                          color: ColorConstants
-                              .WEATHER_MORE_DAY_INFO_ICON_COLOR_LIGHT,
+                          color: Colors.blue,
                           strokeWidth: 1,
                         ),
                       )),
-        ),
+                ),
+
       ),
     ),
   );
