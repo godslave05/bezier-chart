@@ -824,8 +824,9 @@ Widget sample7(BuildContext context) {
 
 //SAMPLE 8 Hourly Chart
 Widget sample8(BuildContext context) {
-  final fromDate = DateTime.now().subtract(Duration(hours: 50));
-  final toDate = DateTime.now();
+  final fromDate = DateTime.now().subtract(Duration(days: 7));
+  final toDate = DateTime.now().add(Duration(days: 7,hours: 23 - DateTime.now().hour));
+  final selectedDate =  DateTime.now();
 
   final date1 = toDate.subtract(Duration(hours: 2));
   final date2 = toDate.subtract(Duration(hours: 3));
@@ -838,17 +839,19 @@ Widget sample8(BuildContext context) {
 
   return Center(
     child: Container(
-      color: Colors.red,
+      color: Colors.white,
       height: MediaQuery.of(context).size.height / 2,
       width: MediaQuery.of(context).size.width,
       child: BezierChart(
         bezierChartScale: BezierChartScale.HOURLY,
         fromDate: fromDate,
         toDate: toDate,
-        selectedDate: toDate,
+        selectedDate: selectedDate,//toDate,
         series: [
           BezierLine(
-            label: "Duty",
+          lineColor: Colors.blue,
+          lineStrokeWidth: 2,
+            label: "Temp",
             data: [
               DataPoint<DateTime>(value: 0, xAxis: date1),
               DataPoint<DateTime>(value: 50, xAxis: date2),
@@ -859,7 +862,7 @@ Widget sample8(BuildContext context) {
             ],
           ),
         ],
-        config: BezierChartConfig(
+/*         config: BezierChartConfig(
           verticalIndicatorStrokeWidth: 3.0,
           verticalIndicatorColor: Colors.black26,
           showVerticalIndicator: true,
@@ -884,7 +887,39 @@ Widget sample8(BuildContext context) {
             end: Alignment.bottomCenter,
           ),
           footerHeight: 35.0,
-        ),
+        ), */
+                config: BezierChartConfig(
+                  footerHeight: 128,
+                  verticalIndicatorColor: Colors.blue,
+                  showVerticalIndicator: true,
+                  contentWidth: MediaQuery.of(context).size.width * 2,
+                  showDataPoints: false,
+                  displayLinesXAxis: true,
+                  bubbleIndicatorValueStyle: TextStyle(
+                      color:Colors.green,
+                      fontSize: 72,),
+                  xAxisTextStyle: TextStyle(
+                    color:Colors.green,
+                  ),
+                  xLinesColor:Colors.blueAccent,
+                  belowBarData: BelowCurveData(
+                      show: false,
+                      colors: [
+                        Colors.grey,
+                        Colors.blueGrey,
+                      ],
+                      gradientColorStops: [0.0, 1.0],
+                      gradientFrom: Offset(0, 0),
+                      gradientTo: Offset(0, 1),
+                      belowSpotsLine: BelowPointLine(
+                        show: true,
+                        flLineStyle: const CustomLine(
+                          color: Colors.blue,
+                          strokeWidth: 1,
+                        ),
+                      )),
+                ),
+
       ),
     ),
   );
